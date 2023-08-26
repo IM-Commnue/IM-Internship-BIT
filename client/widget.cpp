@@ -3,6 +3,7 @@
 #include "homepage.h"
 #include <QTextCharFormat>
 #include <QMessageBox>
+#include <QDateTime>
 
 Widget::Widget(QWidget *parent ,QString name)
     : QWidget(parent)
@@ -13,13 +14,107 @@ Widget::Widget(QWidget *parent ,QString name)
 //        onlineUsers << "User1" << "User2" << "User3";
     myname=name;
 
+    this->port=9999;//端口
+    this->udpSocket=new QUdpSocket(this);//套接字
+    //允许其他服务器连接到相同的地址和端口
+
+    udpSocket->bind(this->port,QUdpSocket::ShareAddress|QUdpSocket::ReuseAddressHint);
+    //监听信号
+
+    connect(udpSocket,&QUdpSocket::readyRead,this,&Widget::ReceiveMessage);
+
     //绑定发送
-    connect(ui->pushButton_8,SIGNAL(clicked()),this,SLOT(sendData()));
+    connect(ui->pushButton_8,&QPushButton::clicked,[=](){
+        sndMsg(Msg);
+    });
+    //connect(ui->pushButton_8,SIGNAL(clicked()),this,SLOT(sendData()));
 }
 
 Widget::~Widget()
 {
     delete ui;
+}
+
+void Widget::sndMsg(Widget::Msgtype type)
+{
+    QByteArray array;
+    //创建流
+    QDataStream stream(&array,QIODevice::WriteOnly);
+    stream<<type<<this->getName();
+    switch (type)
+    {
+        case Msg:
+        if(this->ui->textEdit->toPlainText()=="")
+        {
+            QMessageBox::warning(this,"Warrning","发送内容不能为空");
+            return;
+        }
+        stream<<this->getMsg();
+        break;
+    case UserEnter:
+        break;
+    case UserLeft:
+        break;
+    }
+    //书写报文
+    udpSocket->writeDatagram(array.data(), array.size(), QHostAddress::Broadcast, this->port);
+}
+
+QString Widget::getName()
+{
+    return this->myname;
+}
+
+QString Widget::getMsg()
+{
+    QString msg=ui->textEdit->toHtml();
+    ui->textEdit->clear();
+    ui->textEdit->setFocus();
+    return msg;
+}
+
+//void Widget::userEnter(QString username)
+//{
+
+//}
+
+//void Widget::userLeft(QString username, QString time)
+//{
+
+//}
+
+void Widget::ReceiveMessage()
+{
+    qint64 size=udpSocket->pendingDatagramSize();
+    //qint64变int
+    int mysize=static_cast<int>(size);
+    QByteArray array=QByteArray(mysize,0);
+    udpSocket->readDatagram(array.data(),size);
+    QDataStream stream(&array,QIODevice::ReadOnly);
+    int msgtype;
+    stream>>msgtype;//读取类型
+    QString name,msg;//用户名和聊天信息
+    QString time=QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+
+    switch (msgtype)
+    {
+        case Msg://普通聊天
+        stream>>name>>msg;//导出姓名和聊天内容
+        //增加聊天记录
+        ui->textBrowser->setTextColor(Qt::blue);
+        ui->textBrowser->setCurrentFont(QFont("Times New Roman",12));
+        ui->textBrowser->append("["+name+"]"+time);
+        ui->textBrowser->append(msg);
+        break;
+    case UserEnter:
+        stream>>name;
+//        userEnter(name);
+        break;
+    case UserLeft:
+        stream>>name;
+//        userLeft(name,time);
+        break;
+    }
 }
 
 
@@ -61,6 +156,11 @@ void Widget::on_tableWidget_customContextMenuRequested(const QPoint &pos)
 //    contextMenu.exec(ui->tableWidget->mapToGlobal(pos));
 }
 
+void Widget::closeEvent(QCloseEvent *)
+{
+    emit this->closeWidget();
+}
+
 void Widget::on_exitpushButton_clicked()
 {
     this->close();
@@ -76,4 +176,17 @@ void Widget::sendData()
         QMessageBox::warning(this,tr("Waring"),tr("Text is empty!"),QMessageBox::Yes);
         return;
     }
+}
+
+void Widget::on_underlineToolBtn_clicked()
+{
+    QTextCursor cursor=ui->textEdit->textCursor();
+    if (!cursor.hasSelection()) {
+        return; // 如果没有选中文本，直接返回
+    }
+    QTextCharFormat format;
+    format.setFontUnderline(true);
+
+    cursor.mergeCharFormat(format);
+    ui->textEdit->mergeCurrentCharFormat(format);
 }

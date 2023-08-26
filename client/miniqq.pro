@@ -1,9 +1,10 @@
-QT       += core gui sql
+QT       += core gui qml multimedia sql
 
 QT       +=network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+TARGET = RobotChat
+TEMPLATE = app
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -22,22 +23,29 @@ LIBS += $$PWD/libs/libcomponents.a
 INCLUDEPATH+=$$PWD/libs/include
 
 SOURCES += \
+    baiduvoice.cpp \
     chat.cpp \
     dialog.cpp \
     homepage.cpp \
     main.cpp \
+    sign.cpp \
+    tulingrobot.cpp \
     widget.cpp
 
 HEADERS += \
+    baiduvoice.h \
     chat.h \
     dialog.h \
     homepage.h \
+    sign.h \
+    tulingrobot.h \
     widget.h
 
 FORMS += \
     chat.ui \
     dialog.ui \
     homepage.ui \
+    sign.ui \
     widget.ui
 
 # Default rules for deployment.

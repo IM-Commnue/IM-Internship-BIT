@@ -15,6 +15,11 @@ public:
     explicit Homepage(QWidget *parent = nullptr);
     ~Homepage();
 
+
+
+private slots:
+    void on_chatpushButton_clicked();
+
 private:
     Ui::Homepage *ui;
     QVector<bool> isShow;

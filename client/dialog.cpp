@@ -1,4 +1,5 @@
 #include "dialog.h"
+#include "sign.h"
 #include "ui_dialog.h"
 #include "qtmaterialautocomplete.h"
 #include <QMessageBox>
@@ -105,7 +106,7 @@ void Dialog::on_loginBtn_clicked()
             ui->usrLineEdit->setFocus();
          }
 
-//    // 判断用户名和密码是否正确，如果错误则弹出警告对话框
+    // 判断用户名和密码是否正确，如果错误则弹出警告对话框
 //        if(ui->usrLineEdit->text().trimmed() == tr("user")
 //               && ui->pwdLineEdit->text() == tr("123"))
 //    {
@@ -120,4 +121,12 @@ void Dialog::on_loginBtn_clicked()
 //           ui->pwdLineEdit->clear();
 //           ui->usrLineEdit->setFocus();
 //        }
+}
+
+
+
+void Dialog::on_signBtn_clicked()
+{
+    sign *s=new sign();
+    s->exec();
 }
