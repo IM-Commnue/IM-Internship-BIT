@@ -28,7 +28,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QTextBrowser" name="textBrowser"/>
+         <widget class="QTextEdit" name="OutputTextEdit"/>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -89,7 +89,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QTextEdit" name="textEdit">
+       <widget class="QTextEdit" name="InputTextEdit">
         <property name="maximumSize">
          <size>
           <width>16777215</width>
@@ -114,9 +114,16 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="sendButton">
+         <widget class="QPushButton" name="SendBtn">
           <property name="text">
            <string>发送数据</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="VoiceBtn">
+          <property name="text">
+           <string>语音输入</string>
           </property>
          </widget>
         </item>

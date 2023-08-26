@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     Homepage h;
     Dialog dlg;
-    if (dlg.exec() == QDialog::Accepted)
+    if (dlg.exec()==QDialog::Accepted)
         {
            h.show();
            return a.exec();

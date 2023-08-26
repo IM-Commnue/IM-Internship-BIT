@@ -1,39 +1,71 @@
-#ifndef CHAT_H
-#define CHAT_H
-
-#include <QWidget>
+#ifndef chat_H
+#define chat_H
 #include <QDialog>
-#include <QUdpSocket>
-#include <QtWidgets>
+#include <QMainWindow>
+#include <tulingrobot.h>
 #include <QtNetwork>
-#include <QTextEdit>
-
-QT_BEGIN_NAMESPACE
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QDebug>
+#include<QAudioInput>
+#include<QMediaPlayer>
+#include<baiduvoice.h>
+#include<QMessageBox>
+#include<QTime>
+#include<QSettings>
 namespace Ui {
 class chat;
 }
-QT_END_NAMESPACE
+
 class chat : public QDialog
 {
     Q_OBJECT
 
 public:
-    chat(QWidget *parent ,QString name);
+    explicit chat(QWidget *parent = 0);
+    TulingRobot *p_TulingRobot;
+    baiduVoice *p_BaiduVoice;
+    QString TulingURL;
+    QMediaPlayer* media_player;
+    QAudioDeviceInfo SpeechCurrentDevice;
+    QAudioInput* audio_input=NULL;
+    QBuffer* JsonBuffer=NULL;
+    void setUIString(QString str);
+    void AudioInit();
+    void TokenInit();
+    void getMacAddress();
+    void changeBaiduAudioAns(QString str);
+    bool JudgeTokenTime();
     ~chat();
-
+signals:
+    void changeV2T();
+    void changeUIANS();
+public slots:
+    //直接文字识别
+    void Tuling_replyFinish(QNetworkReply* reply);
+    //语音识别过程获得回答
+    void voice_Tuling_replyFinish(QNetworkReply* reply);
+    //识别声音获得文字
+    void Baidu_VoiceToText_replyFinish(QNetworkReply* reply);
+    void get_Token_slot(QNetworkReply* reply);
+    //文本转语音槽函数
+    void Baidu_TextToVoice_replyFinish();
+    //获得声音后
+    void voice_post_Tuling_slot();
+//    void get_Answer_Set_UI();
 private slots:
-    void on_pushButton_clicked();
-    void on_tableWidget_customContextMenuRequested(const QPoint &pos);
-    void on_exitpushButton_clicked();
-    void sendData();
-    void onSendButtonClicked();
-    void handleAPIResponse(QNetworkReply *reply);
-private:
-    Ui::chat *ui;
+    void on_SendBtn_clicked();
 
-    QString myname;
-    void setupUi();
-    void connectToApi();
+    void on_VoiceBtn_pressed();
+
+    void on_VoiceBtn_released();
+
+private:
+    //显示文本
+    QString tuling_get_ans;
+    QString voice_get_ans;
+    QString UI_ANS_String;
+    Ui::chat *ui;
 };
 
-#endif // CHAT_H
+#endif // chat_H
