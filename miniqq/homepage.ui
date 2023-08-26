@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Homepage</class>
+ <widget class="QDialog" name="Homepage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>271</width>
+    <height>535</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="username">
+     <property name="text">
+      <string>个人用户名：</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="revise">
+     <property name="text">
+      <string>昵称修改</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="chatpushButton">
+     <property name="text">
+      <string>聊天机器人</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QToolBox" name="toolBox">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="page">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>253</width>
+        <height>264</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>好友</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="vlayout"/>
+     </widget>
+     <widget class="QWidget" name="page_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>253</width>
+        <height>264</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>群聊天</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QPushButton" name="addButton">
+       <property name="text">
+        <string>添加好友</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="detefriendbutelton">
+       <property name="text">
+        <string>删除好友</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="addButton_2">
+       <property name="text">
+        <string>添加群聊</string>
+       </property>
+       <property name="autoRepeatDelay">
+        <number>300</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="deletegroupchatbutton">
+       <property name="text">
+        <string>删除群聊</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
