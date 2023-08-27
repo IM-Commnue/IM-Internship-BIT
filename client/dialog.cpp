@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QAction>
+#include <QMovie>
 
 
 Dialog::Dialog(QWidget *parent) :
@@ -16,10 +17,25 @@ Dialog::Dialog(QWidget *parent) :
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
+    //gif图片qmovie加载
+
+    static QMovie *gifMovie=new  QMovie(":/op/001.webp");
+    ui->Qlabel->setMovie(gifMovie);
+    gifMovie->setScaledSize(QSize(ui->Qlabel->width(),ui->Qlabel->height()));
+    gifMovie->start();
+    ui->Qlabel->show();
+    if(gifMovie->isValid())
+    {
+        qDebug()<<"movie is valid.";
+    }else
+    {
+        qDebug()<<"movie is not valid.";
+    }
     //背景图片设置
-    ui->Qlabel->setPixmap(QPixmap(":red/02.png"));
-    ui->Qlabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->Qlabel->setScaledContents(true);
+    //ui->Qlabel->setPixmap(QPixmap(":red/02.png"));
+    //ui->Qlabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //ui->Qlabel->setScaledContents(true);
+
     //密码眼睛操作实现
     QAction *action = new QAction(this);
     action->setIcon(QIcon(":/eye/closecat.png"));
@@ -78,7 +94,7 @@ void Dialog::on_loginBtn_clicked()
         QString qStr=QString("insert into %1 (username,password) values('%2','%3')").arg("login",username,password);
         qDebug()<<qStr;
         query.exec(qStr);
-
+        //判断
         query.exec("select username, password from login");
         bool isFound=false;
         while(query.next())

@@ -2,6 +2,8 @@
 #define SIGN_H
 #include <QMessageBox>
 #include <QDialog>
+#include <QDebug>
+#include <QMovie>
 
 namespace Ui {
 class sign;

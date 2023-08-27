@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1093</width>
+    <width>1056</width>
     <height>485</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>1056</width>
+     <width>1031</width>
      <height>461</height>
     </rect>
    </property>
@@ -27,21 +27,103 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
+        </property>
         <item>
-         <widget class="QTextBrowser" name="textBrowser"/>
+         <widget class="QTextBrowser" name="textBrowser">
+          <property name="maximumSize">
+           <size>
+            <width>1000</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QTextBrowser {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:black;
+}
+
+
+</string>
+          </property>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QComboBox" name="fontComboBox"/>
-          </item>
-          <item>
-           <widget class="QComboBox" name="sizeComboBox"/>
+           <widget class="QComboBox" name="fontComboBox">
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QComboBox {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+QComboBox:hover {
+border: 0.5px solid white;
+	border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color:rgba(84,84,84,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+
+</string>
+            </property>
+           </widget>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <widget class="QPushButton" name="pushButton">
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+QPushButton:hover {
+border: 0.5px solid white;
+	border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color:rgba(84,84,84,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+
+</string>
+              </property>
               <property name="text">
                <string>加粗</string>
               </property>
@@ -49,6 +131,32 @@
             </item>
             <item>
              <widget class="QPushButton" name="underlineToolBtn">
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+QPushButton:hover {
+border: 0.5px solid white;
+	border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color:rgba(84,84,84,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+
+</string>
+              </property>
               <property name="text">
                <string>下划线</string>
               </property>
@@ -56,13 +164,65 @@
             </item>
             <item>
              <widget class="QPushButton" name="sendimagebutton">
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+QPushButton:hover {
+border: 0.5px solid white;
+	border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color:rgba(84,84,84,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+
+</string>
+              </property>
               <property name="text">
-               <string>发送图片</string>
+               <string>发送表情</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="sendToolBtn">
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+QPushButton:hover {
+border: 0.5px solid white;
+	border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color:rgba(84,84,84,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+
+</string>
+              </property>
               <property name="text">
                <string>发送文件</string>
               </property>
@@ -70,6 +230,32 @@
             </item>
             <item>
              <widget class="QPushButton" name="saveToolBtn">
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+QPushButton:hover {
+border: 0.5px solid white;
+	border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color:rgba(84,84,84,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+
+</string>
+              </property>
               <property name="text">
                <string>下载文档</string>
               </property>
@@ -77,6 +263,32 @@
             </item>
             <item>
              <widget class="QPushButton" name="clearToolBtn">
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+QPushButton:hover {
+border: 0.5px solid white;
+	border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color:rgba(84,84,84,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+
+</string>
+              </property>
               <property name="text">
                <string>清空聊天记录</string>
               </property>
@@ -92,9 +304,25 @@
        <widget class="QTextEdit" name="textEdit">
         <property name="maximumSize">
          <size>
-          <width>16777215</width>
+          <width>1000</width>
           <height>100</height>
          </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QTextEdit {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:black;
+}
+
+
+</string>
         </property>
        </widget>
       </item>
@@ -115,6 +343,32 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_8">
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+QPushButton:hover {
+border: 0.5px solid white;
+	border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color:rgba(84,84,84,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+
+</string>
+          </property>
           <property name="text">
            <string>发送数据</string>
           </property>
@@ -161,8 +415,34 @@
         </item>
         <item>
          <widget class="QPushButton" name="exitpushButton">
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+QPushButton:hover {
+border: 0.5px solid white;
+	border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color:rgba(84,84,84,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+
+</string>
+          </property>
           <property name="text">
-           <string>推出聊天</string>
+           <string>退出聊天</string>
           </property>
          </widget>
         </item>
@@ -178,10 +458,41 @@
         <height>16777215</height>
        </size>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QTableWidget {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+
+
+</string>
+      </property>
      </widget>
     </item>
    </layout>
   </widget>
+  <widget class="QLabel" name="Qlabel">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1056</width>
+     <height>485</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <zorder>Qlabel</zorder>
+  <zorder>layoutWidget</zorder>
  </widget>
  <resources/>
  <connections>

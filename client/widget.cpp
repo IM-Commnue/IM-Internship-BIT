@@ -4,12 +4,26 @@
 #include <QTextCharFormat>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QMovie>
 
 Widget::Widget(QWidget *parent ,QString name)
     : QWidget(parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    //gif图片qmovie加载
+    static QMovie *gifMovie=new  QMovie(":/op/wenxin.webp");
+    ui->Qlabel->setMovie(gifMovie);
+    gifMovie->setScaledSize(QSize(ui->Qlabel->width(),ui->Qlabel->height()));
+    gifMovie->start();
+    ui->Qlabel->show();
+    if(gifMovie->isValid())
+    {
+        qDebug()<<"movie is valid.";
+    }else
+    {
+        qDebug()<<"movie is not valid.";
+    }
 //    // 假设 onlineUsers 是一个 QVector 或 QList 存储在线用户信息的数据结构
 //        onlineUsers << "User1" << "User2" << "User3";
     myname=name;
