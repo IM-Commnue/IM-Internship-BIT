@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QDialog>
 #include <QUdpSocket>
+#include <QTcpSocket>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -21,8 +22,9 @@ public:
     void sndMsg(Msgtype type);//广播udp信息
     QString getName();//获取昵称
     QString getMsg();//获取聊天信息
-    void userEnter(QString username);//处理用户输入
-    void userLeft(QString username,QString time);//处理用户离开
+    QString friendName;
+    void userEnter();//处理用户输入
+    void userLeft();//处理用户离开
     void ReceiveMessage();//接受udp信息
 
     //重写关闭事件
@@ -40,10 +42,13 @@ private slots:
 
 private:
     Ui::Widget *ui;
-
+    QTcpSocket *m_socket;//TCP客户端对象
     QString myname;
-    quint16 port;//端口
+
     QUdpSocket *udpSocket;//udp 套接字
+
+    QString m_host = "120.0.0.1"; //服务器IP地址
+    int m_port = 8899; //服务器端口号
 
 protected:
 

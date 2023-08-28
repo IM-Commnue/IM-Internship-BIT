@@ -2,6 +2,10 @@
 #define DIALOG_H
 
 #include <QDialog>
+#include <QTcpSocket>
+#include <QHostAddress>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 namespace Ui {
 class Dialog;
@@ -17,13 +21,14 @@ public:
 
 private slots:
     void on_loginBtn_clicked();
-
-
     void on_signBtn_clicked();
+    void on_resignButton_clicked();
 
 private:
     Ui::Dialog *ui;
-
+    QTcpSocket* m_tcp;
+    std::string recvStr;
+    QByteArray recvMsg;
 };
 
 #endif // DIALOG_H

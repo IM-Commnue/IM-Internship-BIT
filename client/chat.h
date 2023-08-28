@@ -13,6 +13,8 @@
 #include<QMessageBox>
 #include<QTime>
 #include<QSettings>
+#include<QTcpSocket>
+
 namespace Ui {
 class chat;
 }
@@ -66,6 +68,7 @@ private:
     QString voice_get_ans;
     QString UI_ANS_String;
     Ui::chat *ui;
+    QTcpSocket* m_tcp;
 };
 
 #endif // chat_H

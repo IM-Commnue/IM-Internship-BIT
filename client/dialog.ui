@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>400</height>
+    <width>492</width>
+    <height>298</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>180</y>
+     <x>100</x>
+     <y>120</y>
      <width>269</width>
      <height>128</height>
     </rect>
@@ -27,9 +27,6 @@
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="label_2">
-        <property name="styleSheet">
-         <string notr="true">阿</string>
-        </property>
         <property name="text">
          <string>用户名</string>
         </property>
@@ -48,9 +45,6 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLabel" name="label">
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
         <property name="text">
          <string>密    码</string>
         </property>
@@ -69,33 +63,7 @@
      </layout>
     </item>
     <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item>
        <widget class="QPushButton" name="loginBtn">
         <property name="styleSheet">
@@ -202,10 +170,10 @@ color:white;
   <widget class="QLabel" name="login">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>70</y>
+     <x>130</x>
+     <y>20</y>
      <width>211</width>
-     <height>101</height>
+     <height>91</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -228,15 +196,20 @@ border:none;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>400</height>
+     <width>491</width>
+     <height>301</height>
     </rect>
    </property>
-   <property name="contextMenuPolicy">
-    <enum>Qt::ActionsContextMenu</enum>
-   </property>
    <property name="styleSheet">
-    <string notr="true">border-image: url(:/op/02.gif);</string>
+    <string notr="true">QLabel#backgroundLabel {
+
+    background-image: url(:/red/02.png);
+    background-repeat: no-repeat;
+background-position:center center;
+	background-size:cover;
+}
+
+</string>
    </property>
   </widget>
   <zorder>Qlabel</zorder>

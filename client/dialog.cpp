@@ -2,6 +2,7 @@
 #include "sign.h"
 #include "ui_dialog.h"
 #include "qtmaterialautocomplete.h"
+#include "database.h"
 #include <QMessageBox>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -17,29 +18,30 @@ Dialog::Dialog(QWidget *parent) :
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
-    //gif图片qmovie加载
-
-    static QMovie *gifMovie=new  QMovie(":/op/001.webp");
-    ui->Qlabel->setMovie(gifMovie);
-    gifMovie->setScaledSize(QSize(ui->Qlabel->width(),ui->Qlabel->height()));
-    gifMovie->start();
-    ui->Qlabel->show();
-    if(gifMovie->isValid())
-    {
-        qDebug()<<"movie is valid.";
-    }else
-    {
-        qDebug()<<"movie is not valid.";
-    }
+    // 创建通信的套接字对象
+    m_tcp = new QTcpSocket(this);
+//    //gif图片qmovie加载
+//    static QMovie *gifMovie=new  QMovie(":/op/001.webp");
+//    ui->Qlabel->setMovie(gifMovie);
+//    gifMovie->setScaledSize(QSize(ui->Qlabel->width(),ui->Qlabel->height()));
+//    gifMovie->start();
+//    ui->Qlabel->show();
+//    if(gifMovie->isValid())
+//    {
+//        qDebug()<<"movie is valid.";
+//    }else
+//    {
+//        qDebug()<<"movie is not valid.";
+//    }
     //背景图片设置
-    //ui->Qlabel->setPixmap(QPixmap(":red/02.png"));
-    //ui->Qlabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    //ui->Qlabel->setScaledContents(true);
-
+    ui->Qlabel->setPixmap(QPixmap(":red/02.png"));
+    ui->Qlabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->Qlabel->setScaledContents(true);
     //密码眼睛操作实现
     QAction *action = new QAction(this);
     action->setIcon(QIcon(":/eye/closecat.png"));
     int stat = 0;
+    //密码输入时尾部加入一个眼睛操作按钮
     connect(ui->pwdLineEdit, &QtMaterialAutoComplete::textEdited, [=]() {
             static bool first = true;
                 if (first) {
@@ -47,7 +49,14 @@ Dialog::Dialog(QWidget *parent) :
                             first = false;
                            }
             });
+    // 接收服务器发送的数据
+    connect(m_tcp, &QTcpSocket::readyRead, [=]()
+        {
+            recvMsg = m_tcp->readAll();
+            recvStr = recvMsg.toStdString();
+        });
 
+    //密码眼睛图片
     connect(action, &QAction::triggered, [=, &stat]() {
             if (stat == 0) {
                         action->setIcon(QIcon(":/eye/cat.png"));
@@ -74,69 +83,43 @@ Dialog::~Dialog()
 
 void Dialog::on_loginBtn_clicked()
 {
-    //添加数据库
-    QSqlDatabase db =QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("im.db");
-    //报错信息
-    if(!db.open())
+    QString username = ui->usrLineEdit->text();
+    QString password = ui->pwdLineEdit->text();
+
+    //连接服务器
+    QString ip = "192.168.100.13";
+    int port = 9989;
+    m_tcp->connectToHost(QHostAddress(ip), port);
+
+    // 创建 JSON 对象并设置用户名和密码字段
+    QJsonObject jsonObject;
+    jsonObject["class"] = "log"; // json类型为登录
+    jsonObject["username"] = username;
+    jsonObject["password"] = password;
+
+    // 创建 JSON 文档
+    QJsonDocument jsonDoc(jsonObject);
+
+    // 将 JSON 文档转换为字符串
+    QString jsonString = QString::fromUtf8(jsonDoc.toJson());
+
+    // 发送 JSON 字符串
+    m_tcp->write(jsonString.toUtf8());
+    //中间信息检测
+    QString qstr = QString::fromStdString(recvStr);
+    qDebug() << qstr;
+    if(recvStr.compare("1") == 0)
     {
-        qDebug()<<"open DB error";
-        return;
-    }
-    //创建数据表
-    QSqlQuery query;
-        query.exec("create table login (id integer primary key autoincrement,\
-                    username vchar(32),\
-                    password vchar(32))");
-
-        QString username= ui->usrLineEdit->text();
-        QString password= ui->pwdLineEdit->text();
-        QString qStr=QString("insert into %1 (username,password) values('%2','%3')").arg("login",username,password);
-        qDebug()<<qStr;
-        query.exec(qStr);
-        //判断
-        query.exec("select username, password from login");
-        bool isFound=false;
-        while(query.next())
-        {
-            qDebug()<<query.value(0).toString()
-                   <<query.value(1).toString();
-            qDebug()<<QDir::currentPath();
-            if(query.value(0).toString()==username&&query.value(1).toString()==password)
-            {
-                isFound=true;
-            }
-        }
-
-        if(isFound)
-        {
-            QMessageBox::information(NULL, tr("Note"), tr("Login success!"));
-               accept();
-        }else {
-            QMessageBox::warning(this, tr("Waring"),
-                                  tr("user name or password error!"),
-                                  QMessageBox::Yes);
-            // 清空内容并定位光标
-            ui->usrLineEdit->clear();
-            ui->pwdLineEdit->clear();
-            ui->usrLineEdit->setFocus();
-         }
-
-    // 判断用户名和密码是否正确，如果错误则弹出警告对话框
-//        if(ui->usrLineEdit->text().trimmed() == tr("user")
-//               && ui->pwdLineEdit->text() == tr("123"))
-//    {
-//        QMessageBox::information(NULL, tr("Note"), tr("Login success!"));
-//           accept();
-//        } else {
-//           QMessageBox::warning(this, tr("Waring"),
-//                                 tr("user name or password error!"),
-//                                 QMessageBox::Yes);
-//           // 清空内容并定位光标
-//           ui->usrLineEdit->clear();
-//           ui->pwdLineEdit->clear();
-//           ui->usrLineEdit->setFocus();
-//        }
+        QMessageBox::information(NULL, tr("Note"), tr("Login success!"));
+           accept();
+    }else {
+        QMessageBox::warning(this, tr("Waring"),
+                              tr("user name or password error!"),
+                              QMessageBox::Yes);        // 清空内容并定位光标
+        ui->usrLineEdit->clear();
+        ui->pwdLineEdit->clear();
+        ui->usrLineEdit->setFocus();
+     }
 }
 
 
@@ -145,4 +128,9 @@ void Dialog::on_signBtn_clicked()
 {
     sign *s=new sign();
     s->exec();
+}
+
+void Dialog::on_resignButton_clicked()
+{
+
 }

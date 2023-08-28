@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1056</width>
+    <width>1100</width>
     <height>485</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>1031</width>
+     <width>1056</width>
      <height>461</height>
     </rect>
    </property>
@@ -27,17 +27,8 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
-        </property>
         <item>
          <widget class="QTextBrowser" name="textBrowser">
-          <property name="maximumSize">
-           <size>
-            <width>1000</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="styleSheet">
            <string notr="true">QTextBrowser {
 border: 0.5px solid white;
@@ -60,12 +51,36 @@ color:black;
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QComboBox" name="fontComboBox">
-            <property name="maximumSize">
-             <size>
-              <width>200</width>
-              <height>16777215</height>
-             </size>
+            <property name="styleSheet">
+             <string notr="true">QComboBox {
+border: 0.5px solid white;
+border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color: rgba(160,160,160,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+QComboBox:hover {
+border: 0.5px solid white;
+	border-color: rgb(160,160,160);
+border-radius: 6px;
+background-color:rgba(84,84,84,50);
+min-width: 80px;
+font-family:&quot;Microsoft YaHei&quot;;
+font-size:10pt;
+font-weight: bold;
+color:white;
+}
+
+</string>
             </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="sizeComboBox">
             <property name="styleSheet">
              <string notr="true">QComboBox {
 border: 0.5px solid white;
@@ -191,7 +206,7 @@ color:white;
 </string>
               </property>
               <property name="text">
-               <string>发送表情</string>
+               <string>发送图片</string>
               </property>
              </widget>
             </item>
@@ -304,7 +319,7 @@ color:white;
        <widget class="QTextEdit" name="textEdit">
         <property name="maximumSize">
          <size>
-          <width>1000</width>
+          <width>16777215</width>
           <height>100</height>
          </size>
         </property>
@@ -442,7 +457,7 @@ color:white;
 </string>
           </property>
           <property name="text">
-           <string>退出聊天</string>
+           <string>推出聊天</string>
           </property>
          </widget>
         </item>
@@ -483,7 +498,7 @@ color:white;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1056</width>
+     <width>1100</width>
      <height>485</height>
     </rect>
    </property>

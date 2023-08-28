@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.11.2, 2023-08-27T16:01:33. -->
+<!-- Written by QtCreator 4.11.2, 2023-08-27T23:35:07. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -285,8 +285,9 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/fy30840635/miniqq/miniqq.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/fy30840635/miniqq/miniqq.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">miniqq2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/mnt/hgfs/乌班图/miniqq+database/miniqq.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/mnt/hgfs/乌班图/miniqq+database/miniqq.pro</value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="bool" key="RunConfiguration.Arguments.multi">false</value>
     <value type="QString" key="RunConfiguration.OverrideDebuggerStartup"></value>
