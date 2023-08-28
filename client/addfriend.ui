@@ -35,9 +35,9 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="friendname">
          <property name="text">
-          <string>TextLabel</string>
+          <string>好友姓名</string>
          </property>
         </widget>
        </item>
@@ -49,7 +49,7 @@
      <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>PushButton</string>
+        <string>确认</string>
        </property>
       </widget>
      </item>

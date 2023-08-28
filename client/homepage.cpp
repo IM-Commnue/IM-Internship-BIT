@@ -4,6 +4,7 @@
 #include "widget.h"
 #include "chat.h"
 #include "dialog.h"
+#include "addfriend.h"
 #include<QPixmap>
 #include<QtWidgets>
 
@@ -144,4 +145,10 @@ void Homepage::on_revise_clicked()
         });
     }
 
+}
+
+void Homepage::on_addButton_clicked()
+{
+    addfriend *af=new addfriend;
+    af->show();
 }
