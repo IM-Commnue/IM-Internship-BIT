@@ -90,7 +90,7 @@ void Dialog::on_loginBtn_clicked()
     QString password = ui->pwdLineEdit->text();
     myName=username;
     //连接服务器
-    QString ip = "172.20.10.8";
+    QString ip = serverip;
     int port = 9989;
     m_tcp->connectToHost(QHostAddress(ip), port);
 

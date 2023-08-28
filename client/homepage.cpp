@@ -3,7 +3,8 @@
 #include "ui_homepage.h"
 #include "widget.h"
 #include "chat.h"
-
+#include "dialog.h"
+#include "addfriend.h"
 #include<QPixmap>
 #include<QtWidgets>
 
@@ -34,29 +35,7 @@ Homepage::Homepage(QWidget *parent) :
             }
         });
 
-    isShow.push_back(false);
-    //判断聊天窗口是否已被打开,若打开则拒绝再次打开的请求
-    for (int i=0;i<namelist.size();i++)
-    {
-        connect(vector[i],&QToolButton::clicked,[=](){
-            if(isShow[i])
-            {
-                QMessageBox::warning(this,"警告","该聊天窗口已被打开！");
-                return ;
-            }
-            //friendName = namelist[i];
-            isShow[i]=true;
-            Widget *w=new Widget(nullptr,vector[i]->text());
-            w->setWindowIcon(vector[i]->icon());
-            w->setWindowTitle(vector[i]->text());
-            w->show();
-            //关闭时修改对应的isshow
-            connect(w,&Widget::closeWidget,this,[=]()
-            {
-                isShow[i]=false;
-            });
-        });
-    }
+
 
 
 }
@@ -78,7 +57,7 @@ void Homepage::on_revise_clicked()
 {
 
     //连接服务器
-    QString ip = "172.20.10.8";
+    QString ip = serverip;
     int port = 9989;
     if(m_tcp->state()!=QAbstractSocket::ConnectedState)
     {
@@ -139,6 +118,37 @@ void Homepage::on_revise_clicked()
          //设置显示格式
          btn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
          ui->vlayout->addWidget(btn);
-         Homepage::vector.push_back(btn);
+         vector.push_back(btn);
     }
+
+    //判断聊天窗口是否已被打开,若打开则拒绝再次打开的请求
+    isShow.push_back(false);
+    for (int i=0;i<namelist.size();i++)
+    {
+        connect(vector[i],&QToolButton::clicked,[=](){
+            if(isShow[i])
+            {
+                QMessageBox::warning(this,"警告","该聊天窗口已被打开！");
+                return ;
+            }
+            //friendName = namelist[i];
+            isShow[i]=true;
+            Widget *w=new Widget(nullptr,vector[i]->text());
+            w->setWindowIcon(vector[i]->icon());
+            w->setWindowTitle(vector[i]->text());
+            w->show();
+            //关闭时修改对应的isshow
+            connect(w,&Widget::closeWidget,this,[=]()
+            {
+                isShow[i]=false;
+            });
+        });
+    }
+
+}
+
+void Homepage::on_addButton_clicked()
+{
+    addfriend *af=new addfriend;
+    af->show();
 }

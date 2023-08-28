@@ -23,6 +23,8 @@ private slots:
     void on_chatpushButton_clicked();
     void on_revise_clicked();
 
+    void on_addButton_clicked();
+
 private:
     Ui::Homepage *ui;
     QVector<bool> isShow;//判断聊天窗口是否打开

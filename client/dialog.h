@@ -8,6 +8,7 @@
 #include <QJsonObject>
 
 extern QString myName;
+extern QString serverip;
 
 namespace Ui {
 class Dialog;

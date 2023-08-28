@@ -23,6 +23,7 @@ LIBS += $$PWD/libs/libcomponents.a
 INCLUDEPATH+=$$PWD/libs/include
 
 SOURCES += \
+    addfriend.cpp \
     baiduvoice.cpp \
     chat.cpp \
     database.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
     widget.cpp
 
 HEADERS += \
+    addfriend.h \
     baiduvoice.h \
     chat.h \
     database.h \
@@ -44,6 +46,7 @@ HEADERS += \
     widget.h
 
 FORMS += \
+    addfriend.ui \
     chat.ui \
     dialog.ui \
     homepage.ui \

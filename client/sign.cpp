@@ -60,7 +60,7 @@ void sign::on_confirmbutton_clicked()
     QString password = ui->codelineEditit->text();
     QString password_confirm = ui->codelineEdit_2->text();
     //连接服务器
-    QString ip = "192.168.100.13";
+    QString ip = serverip;
     int port = 9989;
     m_tcp->connectToHost(QHostAddress(ip), port);
 

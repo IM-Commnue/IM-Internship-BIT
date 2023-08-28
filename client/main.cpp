@@ -5,6 +5,7 @@
 #include <QApplication>
 
 QString myName;
+QString serverip="192.168.37.134";
 
 int main(int argc, char *argv[])
 {
