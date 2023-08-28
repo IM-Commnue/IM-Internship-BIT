@@ -1,10 +1,14 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
+
+
+
 #include <QWidget>
 #include <QDialog>
 #include <QUdpSocket>
 #include <QTcpSocket>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -22,7 +26,6 @@ public:
     void sndMsg(Msgtype type);//广播udp信息
     QString getName();//获取昵称
     QString getMsg();//获取聊天信息
-    QString friendName;
     void userEnter();//处理用户输入
     void userLeft();//处理用户离开
     void ReceiveMessage();//接受udp信息
@@ -46,7 +49,9 @@ private:
     QString myname;
 
     QUdpSocket *udpSocket;//udp 套接字
-
+    QTcpSocket* m_tcp;
+    std::string recvStr;
+    QByteArray recvMsg;
     QString m_host = "120.0.0.1"; //服务器IP地址
     int m_port = 8899; //服务器端口号
 

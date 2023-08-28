@@ -1,16 +1,22 @@
 #include "widget.h"
+#include "dialog.h"
 #include "ui_widget.h"
 #include "homepage.h"
 #include <QTextCharFormat>
 #include <QMessageBox>
 #include <QDateTime>
 #include <QMovie>
+#include <QJsonDocument>
+
+
 
 Widget::Widget(QWidget *parent ,QString name)
     : QWidget(parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    // 创建通信的套接字对象
+    m_tcp = new QTcpSocket(this);
 //    //gif图片qmovie加载
 //    static QMovie *gifMovie=new  QMovie(":/op/wenxin.webp");
 //    ui->Qlabel->setMovie(gifMovie);
@@ -26,11 +32,22 @@ Widget::Widget(QWidget *parent ,QString name)
 //    }
 //    // 假设 onlineUsers 是一个 QVector 或 QList 存储在线用户信息的数据结构
 //        onlineUsers << "User1" << "User2" << "User3";
-    myname=name;
+    myname=name; //friendname
     this->udpSocket=new QUdpSocket(this);//套接字
     //允许其他服务器连接到相同的地址和端口
 
+    // 接收服务器发送的数据
+    connect(m_tcp, &QTcpSocket::connected, [=]() {
+        qDebug() << "Connected to server";
+    });
 
+    connect(m_tcp, &QTcpSocket::readyRead, [=]()
+        {
+            recvMsg = m_tcp->readAll();
+            QString recvStr = QString::fromUtf8(recvMsg);
+            ui->textBrowser->insertPlainText("friend：" + recvStr + "\n");
+            qDebug()<<"sendData str"<<recvStr;
+        });
     //绑定发送
     connect(ui->pushButton_8,SIGNAL(clicked()),this,SLOT(sendData()));
 }
@@ -94,6 +111,27 @@ void Widget::sendData()
     QString sendStr=ui->textEdit->toPlainText();
     ui->textBrowser->insertPlainText("自己："+sendStr+"\n");
     qDebug()<<"sendData str"<<sendStr;
+        QString ip = "172.20.10.8";
+        int port = 9989;
+        m_tcp->connectToHost(QHostAddress(ip), port);
+        QJsonObject jsonObject;
+        myname = "123";
+        QString myusername = "123456";
+        jsonObject["class"] = "pmsg"; // json类型为聊天
+        jsonObject["username"] = myname; // friendname
+        jsonObject["myname"] = myusername; //myname
+        jsonObject["message"] = sendStr;
+        // 创建 JSON 文档
+        QJsonDocument jsonDoc(jsonObject);
+
+        // 将 JSON 文档转换为字符串
+        QString jsonString = QString::fromUtf8(jsonDoc.toJson());
+
+        // 发送 JSON 字符串
+        m_tcp->write(jsonString.toUtf8());
+        //中间信息检测
+        QString qstr = QString::fromStdString(recvStr);
+        qDebug() << qstr;
     if(sendStr.isEmpty())
     {
         QMessageBox::warning(this,tr("Waring"),tr("Text is empty!"),QMessageBox::Yes);

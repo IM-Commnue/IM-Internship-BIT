@@ -1,6 +1,7 @@
 #include "dialog.h"
 #include "sign.h"
 #include "ui_dialog.h"
+#include "widget.h"
 #include "qtmaterialautocomplete.h"
 #include "database.h"
 #include <QMessageBox>
@@ -11,7 +12,9 @@
 #include <QDir>
 #include <QAction>
 #include <QMovie>
+#include <QString>
 
+QString myusername;
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -50,11 +53,11 @@ Dialog::Dialog(QWidget *parent) :
                            }
             });
     // 接收服务器发送的数据
-    connect(m_tcp, &QTcpSocket::readyRead, [=]()
-        {
-            recvMsg = m_tcp->readAll();
-            recvStr = recvMsg.toStdString();
-        });
+//    connect(m_tcp, &QTcpSocket::readyRead, [=]()
+//        {
+//            recvMsg = m_tcp->readAll();
+//            recvStr = recvMsg.toStdString();
+//        });
 
     //密码眼睛图片
     connect(action, &QAction::triggered, [=, &stat]() {
@@ -85,9 +88,9 @@ void Dialog::on_loginBtn_clicked()
 {
     QString username = ui->usrLineEdit->text();
     QString password = ui->pwdLineEdit->text();
-
+    myName=username;
     //连接服务器
-    QString ip = "192.168.100.13";
+    QString ip = "172.20.10.8";
     int port = 9989;
     m_tcp->connectToHost(QHostAddress(ip), port);
 
@@ -105,6 +108,12 @@ void Dialog::on_loginBtn_clicked()
 
     // 发送 JSON 字符串
     m_tcp->write(jsonString.toUtf8());
+    // 接收服务器发送的数据
+    connect(m_tcp, &QTcpSocket::readyRead, [=]()
+        {
+            recvMsg = m_tcp->readAll();
+            recvStr = recvMsg.toStdString();
+        });
     //中间信息检测
     QString qstr = QString::fromStdString(recvStr);
     qDebug() << qstr;
@@ -112,7 +121,7 @@ void Dialog::on_loginBtn_clicked()
     {
         QMessageBox::information(NULL, tr("Note"), tr("Login success!"));
            accept();
-    }else {
+    }else if(recvStr.compare("0") == 0) {
         QMessageBox::warning(this, tr("Waring"),
                               tr("user name or password error!"),
                               QMessageBox::Yes);        // 清空内容并定位光标

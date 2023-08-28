@@ -4,7 +4,7 @@
 #include "dialog.h"
 #include <QApplication>
 
-//static QString friendName;
+QString myName;
 
 int main(int argc, char *argv[])
 {
@@ -13,7 +13,9 @@ int main(int argc, char *argv[])
     Dialog dlg;
     if (dlg.exec()==QDialog::Accepted)
         {
+
            h.show();
+
            return a.exec();
         }
         else return 0;
