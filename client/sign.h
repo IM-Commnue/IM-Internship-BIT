@@ -2,6 +2,7 @@
 #define SIGN_H
 #include <QMessageBox>
 #include <QDialog>
+#include <QTcpSocket>
 
 namespace Ui {
 class sign;
@@ -22,6 +23,9 @@ private slots:
 
 private:
     Ui::sign *ui;
+    QTcpSocket* m_tcp;
+    std::string recvStr;
+    QByteArray recvMsg;
 };
 
 #endif // SIGN_H

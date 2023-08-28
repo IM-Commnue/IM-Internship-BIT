@@ -25,6 +25,7 @@ INCLUDEPATH+=$$PWD/libs/include
 SOURCES += \
     baiduvoice.cpp \
     chat.cpp \
+    database.cpp \
     dialog.cpp \
     homepage.cpp \
     main.cpp \
@@ -35,6 +36,7 @@ SOURCES += \
 HEADERS += \
     baiduvoice.h \
     chat.h \
+    database.h \
     dialog.h \
     homepage.h \
     sign.h \

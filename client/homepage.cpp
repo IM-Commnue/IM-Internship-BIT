@@ -18,6 +18,7 @@ Homepage::Homepage(QWidget *parent) :
     //好友头像列表
     QStringList imagelist;
     imagelist<<"1"<<"2"<<"3"<<"4"<<"5"<<"6";
+    //好友按钮实现
     for (int i=0;i<namelist.size();i++) {
         QToolButton *btn=new QToolButton(this);
         //头像设置
@@ -33,6 +34,7 @@ Homepage::Homepage(QWidget *parent) :
          vector.push_back(btn);
          isShow.push_back(false);
     }
+    //判断聊天窗口是否已被打开
     for (int i=0;i<namelist.size();i++)
     {
         connect(vector[i],&QToolButton::clicked,[=](){
@@ -41,6 +43,7 @@ Homepage::Homepage(QWidget *parent) :
                 QMessageBox::warning(this,"警告","该聊天窗口已被打开！");
                 return ;
             }
+            //friendName = namelist[i];
             isShow[i]=true;
             Widget *w=new Widget(nullptr,vector[i]->text());
             w->setWindowIcon(vector[i]->icon());
