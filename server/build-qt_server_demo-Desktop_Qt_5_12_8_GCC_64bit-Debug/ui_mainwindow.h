@@ -119,7 +119,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
-        groupBox->setTitle(QApplication::translate("MainWindow", "\350\201\212\345\244\251\350\256\260\345\275\225", nullptr));
+        groupBox->setTitle(QApplication::translate("MainWindow", "\345\256\242\346\210\267\347\253\257\346\266\210\346\201\257\350\256\260\345\275\225", nullptr));
         label->setText(QApplication::translate("MainWindow", "\347\253\257\345\217\243", nullptr));
         setListen->setText(QApplication::translate("MainWindow", "\345\220\257\345\212\250", nullptr));
         label_2->setText(QApplication::translate("MainWindow", "\345\217\221\351\200\201\344\277\241\346\201\257", nullptr));

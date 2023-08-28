@@ -24,7 +24,7 @@
    <item>
     <widget class="QPushButton" name="revise">
      <property name="text">
-      <string>昵称修改</string>
+      <string>刷新好友</string>
      </property>
     </widget>
    </item>

@@ -7,6 +7,7 @@
 #include <QString>
 #include <QDebug>
 #include <QMessageBox>
+#include <QList>
 
 class DataBase{
 public:
@@ -36,7 +37,7 @@ public:
     /*QString sql = ("create table %1 (friendname varchar(50) primary key)").arg(username);*/
     int get_friends_num(const char* username);
     void database_friend_insert(const char* username, const char* friendname);
-    QString* get_friendlist(const char* username, int friendnum);
+    QList <QString> get_friendlist(const char* username);
 
     //群聊数据库
 

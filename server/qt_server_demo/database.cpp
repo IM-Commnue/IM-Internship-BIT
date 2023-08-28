@@ -213,17 +213,15 @@ int DataBase::get_friends_num(const char* username){
 }
 
 
-QString* DataBase::get_friendlist(const char* username, int friendnum){
-
-    QString* friendlist = new QString[friendnum+1];
+QList<QString> DataBase::get_friendlist(const char* username)
+{   // recieve user's name and return his/her all friends as a QList
+    QList<QString> friendlist;
     QString qstr2 = QString("select friendname from friends where username = '%1'").arg(username);
     query.exec(qstr2);
-    int i = 0;
-    while(query.next()){
-        friendlist[i] = query.value(0).toString();
+    while(query.next())
+    {
+        friendlist.append(query.value(0).toString());
         //qDebug()<<query.value(0).toString();
-        qDebug()<<friendlist[i];
-        i++;
     }
     return friendlist;
 }

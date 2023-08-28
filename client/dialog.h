@@ -7,6 +7,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+extern QString myName;
+
 namespace Ui {
 class Dialog;
 }
@@ -18,6 +20,7 @@ class Dialog : public QDialog
 public:
     explicit Dialog(QWidget *parent = nullptr);
     ~Dialog();
+    static QString myusername;
 
 private slots:
     void on_loginBtn_clicked();
@@ -29,6 +32,7 @@ private:
     QTcpSocket* m_tcp;
     std::string recvStr;
     QByteArray recvMsg;
+
 };
 
 #endif // DIALOG_H

@@ -5,6 +5,7 @@
 #include "QMap"
 #include "QMapIterator"
 #include "cstring"
+#include "QJsonArray"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -21,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_s, &QTcpServer::newConnection, this, [=]()
     {
 
-        m_tcp = m_s->nextPendingConnection();
+        QTcpSocket* m_tcp = m_s->nextPendingConnection();
         m_status->setText("OK");
         ui->record->append("Client connect");
         reg_and_log ral;
@@ -33,7 +34,6 @@ MainWindow::MainWindow(QWidget *parent)
         connect(m_tcp, &QTcpSocket::readyRead, this, [=]()
         {
             QByteArray data = m_tcp->readAll();
-            QMap <QTcpSocket*, QString> clients;
             // change:
             QJsonDocument jsd = QJsonDocument::fromJson(data);
             //QFile file("data.json");
@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
                     m_tcp->write("1");
                     ui->record->append("account and key are right");
                     QString name = jso["username"].toString();
-                    clients.insert(m_tcp, name);
+                    clients_online.insert(m_tcp, name);
                 }
 
             }
@@ -91,16 +91,49 @@ MainWindow::MainWindow(QWidget *parent)
                 QString name_talk_to = jso["username"].toString();
                 QString who_says = jso["myname"].toString();
                 QString msg = jso["message"].toString();
-                for(QTcpSocket* tcp : clients.keys())
+                ui->record->append(name_talk_to);
+                ui->record->append(who_says);
+                ui->record->append(msg);
+                for(QTcpSocket* tcp : clients_online.keys())
                 {
-                    if(clients.value(tcp) == name_talk_to)
+                    if(clients_online.value(tcp) == name_talk_to)
                     {
+                        ui->record->append("find the person wanna talk to");
+                        ui->record->append(name_talk_to);
                         std::string name = who_says.toStdString();
                         std::string text = msg.toStdString();
                         std::string send = name + ":\n" + text;
                         tcp->write(send.c_str());
+                        ui->record->append(QString(send.c_str()));
                     }
                 }
+            }
+            else if(jso["class"].toString() == QString("addfriend"))
+            {
+                QString user_qstr = jso["myname"].toString();
+                const char* user = user_qstr.toStdString().c_str();
+                QString user_friend_qstr = jso["friendname"].toString();
+                const char* user_friend = user_friend_qstr.toStdString().c_str();
+                DataBase db;
+                db.database_friend_insert(user, user_friend);
+                ui->record->append("new friends relationship has been stored");
+                m_tcp->write("1");
+            }
+            else if(jso["class"].toString() == QString("friendlist"))
+            {
+                QString user = jso["myname"].toString();
+                ui->record->append("a requirement for friendlist");
+                DataBase db;
+                QList<QString> friends = db.get_friendlist(user.toStdString().c_str());
+                QJsonArray friend_list_json;
+                for(QString one_friend : friends)
+                {
+                    friend_list_json.append(one_friend);
+                    ui->record->append(one_friend);
+                }
+                QJsonDocument fri_json_doc(friend_list_json);
+                QByteArray friend_list_send = fri_json_doc.toJson();
+                m_tcp->write(friend_list_send);
             }
                 // ui->record->append("Client says:\n" + data);
         });
@@ -140,12 +173,9 @@ void MainWindow::on_setListen_clicked()
         ui->record->append(username);
         ui->record->append(password);
     }
-    /*QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-        db.setDatabaseName("test.db");
+        //DataBase db;
 
-        // 打开数据库
-        db.open();
-
+        /* 打开数据库
         // 执行 SQL 查询
         QSqlQuery query;
         query.exec("SELECT * FROM user");
@@ -158,17 +188,12 @@ void MainWindow::on_setListen_clicked()
             ui->record->append(username);
             ui->record->append(password);
         }
-
-        // 关闭数据库
-        db.close();*/
-
+        */
 
 
 }
 
 void MainWindow::on_sendMsg_clicked()
 {
-    QString m = ui->msg->text();
-    m_tcp->write(m.toUtf8());
-    ui->record->append("Server says:\n" + m);
+
 }

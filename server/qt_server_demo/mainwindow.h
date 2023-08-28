@@ -8,6 +8,7 @@
 #include <cstring>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QMap>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,8 +21,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    QTcpSocket *m_tcp;
-
+    QMap <QTcpSocket*, QString> clients_online;
 private slots:
     void on_setListen_clicked();
 
@@ -31,5 +31,6 @@ private:
     Ui::MainWindow *ui;
     QTcpServer *m_s;
     QLabel *m_status;
+
 };
 #endif // MAINWINDOW_H

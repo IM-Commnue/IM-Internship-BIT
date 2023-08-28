@@ -83,7 +83,7 @@ void sign::on_confirmbutton_clicked()
     //中间信息检测
     qDebug() << qstr;
     qDebug()<<username<<mail<< password<< password_confirm;
-    if(recvStr.compare("1") != 0)
+    if(recvStr.compare("1") == 0)
     {
         QMessageBox::warning(this,tr("错误"),tr(
                                  "该用户名已被注册"),

@@ -18,7 +18,7 @@
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
-       <string>聊天记录</string>
+       <string>客户端消息记录</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
