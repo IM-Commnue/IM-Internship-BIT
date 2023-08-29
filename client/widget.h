@@ -9,6 +9,12 @@
 #include <QDialog>
 #include <QUdpSocket>
 #include <QTcpSocket>
+#include <QJsonDocument>
+#include <QFileDialog>
+#include <QTextCharFormat>
+#include <QMessageBox>
+#include <QDateTime>
+#include <QMovie>
 
 
 QT_BEGIN_NAMESPACE
@@ -22,7 +28,7 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent ,QString name);
     ~Widget();
-
+    void setfriendname(QString n);
     enum Msgtype{Msg,UserEnter,UserLeft};
     void sndMsg(Msgtype type);//广播udp信息
     QString getName();//获取昵称
@@ -59,6 +65,9 @@ private:
     QString m_host = "120.0.0.1"; //服务器IP地址
     int m_port = 8899; //服务器端口号
     QString friendname;
+    QJsonDocument document;
+    QJsonObject object;
+    QString file_message_class;
 protected:
 
 };

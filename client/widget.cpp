@@ -3,12 +3,9 @@
 #include "ui_widget.h"
 #include "homepage.h"
 #include "file.h"
-#include <QTextCharFormat>
-#include <QMessageBox>
-#include <QDateTime>
-#include <QMovie>
-#include <QJsonDocument>
-#include <QFileDialog>
+#include <QTimer>
+
+
 
 
 
@@ -54,10 +51,44 @@ Widget::Widget(QWidget *parent ,QString name)
     connect(m_tcp, &QTcpSocket::readyRead, [=]()
         {
             recvMsg = m_tcp->readAll();
-            recvStr = recvMsg.toStdString();
-            qStr=QString::fromStdString(recvStr);
-            ui->textBrowser->insertPlainText("friend：" + qStr + "\n");
-            qDebug()<<"recvStr："<<qStr;
+            document=QJsonDocument::fromJson(recvMsg);
+            object=document.object();
+            file_message_class=object["class"].toString();
+            if(file_message_class.compare("pmsg")==0)
+            {
+//                recvStr = recvMsg.toStdString();
+                qStr=object["says_what"].toString();//QString::fromStdString(recvStr);
+                qDebug()<<"qStr："<<qStr;
+                QString whosays=object["who_says"].toString();
+                ui->textBrowser->insertPlainText(whosays+":"+ qStr + "\n");
+            }else if(file_message_class.compare("file")==0)
+            {
+                //接受文件
+//                QJsonDocument recvfileDocument=QJsonDocument::fromJson(recvMsg);
+                if (!document.isNull())
+                {
+//                    QJsonObject test2=test1.object();
+                    QString dataBase64 = object["data"].toString();
+                    QByteArray fileData = QByteArray::fromBase64(dataBase64.toUtf8());
+                    QString savePath = QFileDialog::getSaveFileName(this, tr("Save File"), "");
+                    QFile File(savePath);
+                    if (File.open(QIODevice::WriteOnly))
+                    {
+                    File.write(fileData);
+                    File.close();
+                    qDebug() << "Photo saved to" << savePath;
+                    } else {
+                    qDebug() << "Error saving photo";
+                    }} else {
+                    qDebug() << "Invalid JSON data received";
+                    }
+            }else
+            {
+                qDebug()<<"file_message_class.compare(pmsg)"<<file_message_class.compare("pmsg");
+                qDebug()<<"file_message_class.compare(file)"<<file_message_class.compare("file");
+                qDebug()<<"error";
+            }
+
         });
     //绑定发送
 //    connect(ui->pushButton_8,SIGNAL(clicked()),this,SLOT(sendData()));
@@ -67,6 +98,11 @@ Widget::Widget(QWidget *parent ,QString name)
 Widget::~Widget()
 {
     delete ui;
+}
+
+void Widget::setfriendname(QString n)
+{
+    friendname=n;
 }
 
 
@@ -140,7 +176,7 @@ void Widget::sendData()
         {
         // 创建 JSON 对象并设置用户名和密码字段
         QJsonObject jsonObject;
-        friendname = "123456";//text!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //friendname = "123456";//text!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //填写 JSON 文档
         jsonObject["class"] = "pmsg"; // json类型为聊天
         jsonObject["username"] = friendname; // friendname
@@ -266,25 +302,65 @@ void Widget::on_underlineToolBtn_clicked()
 
 void Widget::on_sendToolBtn_clicked()//文件发送按钮
 {
+    //发送文件
+    if(m_tcp->waitForConnected())
+    {
+    qDebug() << "Connected to send the file.";
     QString filePath = QFileDialog::getOpenFileName(nullptr, "Select a file to send");
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly))
     {
           qDebug() << "Failed to open the file.";
+          return;
     }
-        QByteArray fileData = file.readAll();
-            file.close();
-            friendname="123465";//！！！！！！！！！！！！！！！！！
+    //读取文件姓名和大小
+    QString file_name = file.fileName();
+    qint64 file_size = file.size();
+    const qint64 BlockSize = 512;
+
+//            QByteArray fileData = file.readAll();
+//            file.close();
+            //friendname="123465";//！！！！！！！！！！！！！！！！！
+            //填写 JSON 对象
             QJsonObject jsonObject;
-            jsonObject["class"] = "sendfile";
-            jsonObject["friendname"]=friendname;
-            jsonObject["filename"] = file.fileName();
-            jsonObject["data"] = QString(fileData.toBase64());
+            jsonObject["class"] = "file";
+            jsonObject["who_sent"]=myName;
+            jsonObject["to_whom"]=friendname;
+            //jsonObject["filename"] = file.fileName();
+            //！！！！！
+            //jsonObject["data"] = QString(fileData.toBase64());
+            //分块新加
+            jsonObject["file_size"] = static_cast<double>(file_size);
+            // 创建 JSON 文档
             QJsonDocument jsonDocument(jsonObject);
             QByteArray jsonData = jsonDocument.toJson();
-            m_tcp->write(jsonData);
-            m_tcp->disconnectFromHost();
+//            //发送文件
+//            m_tcp->write(jsonData);
+            //发送文件信息
+            qDebug()<<jsonDocument.toJson();
+            // 将 JSON 文档转换为字符串
+            QString jsonString = QString::fromUtf8(jsonDocument.toJson());
+            m_tcp->write(jsonString.toUtf8());
+            //发送文件数据块
+            QByteArray buffer;
+            qint64 bytesRemaining = file_size;
+
+            //声明计时器变量
+            QTimer timer;
+            while (bytesRemaining > 0)
+            {
+                timer.start(20);
+                buffer = file.read(qMin(static_cast<qint64>(BlockSize), bytesRemaining));
+                m_tcp->write(buffer);
+                bytesRemaining -= buffer.size();
+
+            }
+            //文件发送判断
             qDebug() << "File sent.";
+            file.close();
+    }else {
+    qDebug()<<"sent fail";
+}
 //    file *f=new file();
 //    f->show();
 }
@@ -298,7 +374,7 @@ void Widget::on_pushButton_8_clicked()
         {
         // 创建 JSON 对象并设置用户名和密码字段
         QJsonObject jsonObject;
-        friendname = "123456";//text!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //friendname = "123456";//test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //填写 JSON 文档
         jsonObject["class"] = "pmsg"; // json类型为聊天
         jsonObject["username"] = friendname; // friendname

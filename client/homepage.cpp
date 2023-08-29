@@ -121,6 +121,7 @@ void Homepage::on_revise_clicked()
             //friendName = namelist[i];
             isShow[i]=true;
             Widget *w=new Widget(nullptr,vector[i]->text());
+            w->setfriendname(namelist[i]);
             w->setWindowIcon(vector[i]->icon());
             w->setWindowTitle(vector[i]->text());
             w->show();

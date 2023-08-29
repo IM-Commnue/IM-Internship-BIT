@@ -35,6 +35,8 @@ void file::on_pushButton_clicked()
         QByteArray fileData = file.readAll();
             file.close();
             QJsonObject jsonObject;
+//            jsonObject["who_sent"]=myName;
+//            jsonObject["to_whom"]=friendname;
             jsonObject["filename"] = file.fileName();
             jsonObject["data"] = QString(fileData.toBase64());
             QJsonDocument jsonDocument(jsonObject);
