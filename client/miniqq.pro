@@ -28,6 +28,7 @@ SOURCES += \
     chat.cpp \
     database.cpp \
     dialog.cpp \
+    file.cpp \
     homepage.cpp \
     main.cpp \
     sign.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     chat.h \
     database.h \
     dialog.h \
+    file.h \
     homepage.h \
     sign.h \
     tulingrobot.h \
@@ -49,6 +51,7 @@ FORMS += \
     addfriend.ui \
     chat.ui \
     dialog.ui \
+    file.ui \
     homepage.ui \
     sign.ui \
     widget.ui

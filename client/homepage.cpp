@@ -14,7 +14,6 @@ Homepage::Homepage(QWidget *parent) :
 {
 
     ui->setupUi(this);
-
     // 创建通信的套接字对象
     m_tcp = new QTcpSocket(this);
     //断开潜在的额外连接
@@ -55,7 +54,6 @@ void Homepage::on_chatpushButton_clicked()
 
 void Homepage::on_revise_clicked()
 {
-
     //连接服务器
     QString ip = serverip;
     int port = 9989;
@@ -84,17 +82,6 @@ void Homepage::on_revise_clicked()
         }
     }
 
-//    //中间信息检测
-//    QString qstr = QString::fromStdString(recvStr);
-    //qDebug() << ;
-    //接收信息转QString
-//    QDataStream stream(&recvMsg,QIODevice::ReadOnly);
-//    QString qstr = QString::fromStdString(recvStr);
-//    stream>>Homepage::namelist;
-    //好友列表
-//    QList<QString> namelist;
-//    stream>>namelist;
-//    namelist<<"mycc"<<"wty"<<"fy"<<"eet"<<"xhr";
     //好友头像列表
     QStringList imagelist;
     imagelist<<"1"<<"2"<<"3"<<"4"<<"5"<<"6";

@@ -119,8 +119,6 @@ void sign::on_confirmbutton_clicked()
 
     database.disconnect_database();
 
-    Dialog* d = new Dialog();
-    d->show();
     this->close();
 
 }

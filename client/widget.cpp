@@ -2,11 +2,13 @@
 #include "dialog.h"
 #include "ui_widget.h"
 #include "homepage.h"
+#include "file.h"
 #include <QTextCharFormat>
 #include <QMessageBox>
 #include <QDateTime>
 #include <QMovie>
 #include <QJsonDocument>
+#include <QFileDialog>
 
 
 
@@ -17,6 +19,16 @@ Widget::Widget(QWidget *parent ,QString name)
     ui->setupUi(this);
     // 创建通信的套接字对象
     m_tcp = new QTcpSocket(this);
+    //断开潜在的额外连接
+    disconnect(m_tcp, &QTcpSocket::readyRead,this,nullptr);
+    //建立连接
+    QString ip = serverip;
+    int port = 9989;
+    if(m_tcp->state()!=QAbstractSocket::ConnectedState)
+    {
+        m_tcp->connectToHost(QHostAddress(ip), port);
+    }
+
 //    //gif图片qmovie加载
 //    static QMovie *gifMovie=new  QMovie(":/op/wenxin.webp");
 //    ui->Qlabel->setMovie(gifMovie);
@@ -32,24 +44,24 @@ Widget::Widget(QWidget *parent ,QString name)
 //    }
 //    // 假设 onlineUsers 是一个 QVector 或 QList 存储在线用户信息的数据结构
 //        onlineUsers << "User1" << "User2" << "User3";
-    myname=name; //friendname
-    this->udpSocket=new QUdpSocket(this);//套接字
-    //允许其他服务器连接到相同的地址和端口
 
-    // 接收服务器发送的数据
-    connect(m_tcp, &QTcpSocket::connected, [=]() {
-        qDebug() << "Connected to server";
-    });
+//    this->udpSocket=new QUdpSocket(this);//套接字
 
+//    connect(m_tcp, &QTcpSocket::connected, [=]() {
+//        qDebug() << "Connected to server";
+//    });
+// 接收服务器发送的数据
     connect(m_tcp, &QTcpSocket::readyRead, [=]()
         {
             recvMsg = m_tcp->readAll();
-            QString recvStr = QString::fromUtf8(recvMsg);
-            ui->textBrowser->insertPlainText("friend：" + recvStr + "\n");
-            qDebug()<<"sendData str"<<recvStr;
+            recvStr = recvMsg.toStdString();
+            qStr=QString::fromStdString(recvStr);
+            ui->textBrowser->insertPlainText("friend：" + qStr + "\n");
+            qDebug()<<"recvStr："<<qStr;
         });
     //绑定发送
-    connect(ui->pushButton_8,SIGNAL(clicked()),this,SLOT(sendData()));
+//    connect(ui->pushButton_8,SIGNAL(clicked()),this,SLOT(sendData()));
+
 }
 
 Widget::~Widget()
@@ -73,7 +85,7 @@ void Widget::on_pushButton_clicked()// 设置字体加粗
     ui->textEdit->mergeCurrentCharFormat(format); // 保持后续文本的格式一致
 }
 
-void Widget::on_tableWidget_customContextMenuRequested(const QPoint &pos)
+void Widget::on_tableWidget_customContextMenuRequested(const QPoint &pos)//暂时无用代码
 {
 //    // 获取当前在线用户信息（假设已经从数据源获取）
 //    QVector<QString> onlineUsers = getOnlineUsers(); // 从某个数据源获取在线用户信息
@@ -109,34 +121,51 @@ void Widget::on_exitpushButton_clicked()
 void Widget::sendData()
 {
     QString sendStr=ui->textEdit->toPlainText();
-    ui->textBrowser->insertPlainText("自己："+sendStr+"\n");
-    qDebug()<<"sendData str"<<sendStr;
-        QString ip = "172.20.10.8";
-        int port = 9989;
-        m_tcp->connectToHost(QHostAddress(ip), port);
-        QJsonObject jsonObject;
-        myname = "123";
-        QString myusername = "123456";
-        jsonObject["class"] = "pmsg"; // json类型为聊天
-        jsonObject["username"] = myname; // friendname
-        jsonObject["myname"] = myusername; //myname
-        jsonObject["message"] = sendStr;
-        // 创建 JSON 文档
-        QJsonDocument jsonDoc(jsonObject);
-
-        // 将 JSON 文档转换为字符串
-        QString jsonString = QString::fromUtf8(jsonDoc.toJson());
-
-        // 发送 JSON 字符串
-        m_tcp->write(jsonString.toUtf8());
-        //中间信息检测
-        QString qstr = QString::fromStdString(recvStr);
-        qDebug() << qstr;
     if(sendStr.isEmpty())
     {
         QMessageBox::warning(this,tr("Waring"),tr("Text is empty!"),QMessageBox::Yes);
         return;
     }
+    ui->textBrowser->insertPlainText("自己："+sendStr+"\n");
+    //检查发送消息内容
+    qDebug()<<"sendData str"<<sendStr;
+    //建立连接
+        QString ip = serverip;
+        int port = 9989;
+        if(m_tcp->state()!=QAbstractSocket::ConnectedState)
+        {
+            m_tcp->connectToHost(QHostAddress(ip), port);
+        }
+        if(m_tcp->waitForConnected())
+        {
+        // 创建 JSON 对象并设置用户名和密码字段
+        QJsonObject jsonObject;
+        friendname = "123456";//text!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //填写 JSON 文档
+        jsonObject["class"] = "pmsg"; // json类型为聊天
+        jsonObject["username"] = friendname; // friendname
+        jsonObject["myname"] = myName; //myname
+        jsonObject["message"] = sendStr;
+        // 创建 JSON 文档
+        QJsonDocument jsonDoc(jsonObject);
+        // 将 JSON 文档转换为字符串
+        QString jsonString = QString::fromUtf8(jsonDoc.toJson());
+        // 发送 JSON 字符串
+        m_tcp->write(jsonString.toUtf8());
+        //中间信息检测
+        QString qstr = QString::fromStdString(recvStr);
+        qDebug() << qstr;
+//        if(m_tcp->waitForReadyRead())
+//        {
+//            qDebug()<<"m_tcp->waitForReadyRead()被触发";
+//            recvMsg = m_tcp->readAll();
+//            recvStr = recvMsg.toStdString().c_str();
+//            qStr=QString::fromStdString(recvStr);
+//            ui->textBrowser->insertPlainText("friend：" + qStr + "\n");
+//            qDebug()<<"recvStr："<<qStr;
+//        }
+
+        }
 }
 
 //新一代代码编写区
@@ -233,4 +262,66 @@ void Widget::on_underlineToolBtn_clicked()
 
     cursor.mergeCharFormat(format);
     ui->textEdit->mergeCurrentCharFormat(format);
+}
+
+void Widget::on_sendToolBtn_clicked()//文件发送按钮
+{
+    QString filePath = QFileDialog::getOpenFileName(nullptr, "Select a file to send");
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+          qDebug() << "Failed to open the file.";
+    }
+        QByteArray fileData = file.readAll();
+            file.close();
+            friendname="123465";//！！！！！！！！！！！！！！！！！
+            QJsonObject jsonObject;
+            jsonObject["class"] = "sendfile";
+            jsonObject["friendname"]=friendname;
+            jsonObject["filename"] = file.fileName();
+            jsonObject["data"] = QString(fileData.toBase64());
+            QJsonDocument jsonDocument(jsonObject);
+            QByteArray jsonData = jsonDocument.toJson();
+            m_tcp->write(jsonData);
+            m_tcp->disconnectFromHost();
+            qDebug() << "File sent.";
+//    file *f=new file();
+//    f->show();
+}
+
+void Widget::on_pushButton_8_clicked()
+{
+    QString sendStr=ui->textEdit->toPlainText();
+
+
+        if(m_tcp->waitForConnected())
+        {
+        // 创建 JSON 对象并设置用户名和密码字段
+        QJsonObject jsonObject;
+        friendname = "123456";//text!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //填写 JSON 文档
+        jsonObject["class"] = "pmsg"; // json类型为聊天
+        jsonObject["username"] = friendname; // friendname
+        jsonObject["myname"] = myName; //myname
+        jsonObject["message"] = sendStr;
+        // 创建 JSON 文档
+        QJsonDocument jsonDoc(jsonObject);
+        // 将 JSON 文档转换为字符串
+        QString jsonString = QString::fromUtf8(jsonDoc.toJson());
+        // 发送 JSON 字符串
+        m_tcp->write(jsonString.toUtf8());
+        //中间信息检测
+        QString qstr = QString::fromStdString(recvStr);
+        qDebug() << qstr;
+//        if(m_tcp->waitForReadyRead())
+//        {
+//            qDebug()<<"m_tcp->waitForReadyRead()被触发";
+//            recvMsg = m_tcp->readAll();
+//            recvStr = recvMsg.toStdString().c_str();
+//            qStr=QString::fromStdString(recvStr);
+//            ui->textBrowser->insertPlainText("friend：" + qStr + "\n");
+//            qDebug()<<"recvStr："<<qStr;
+//        }
+        }
+
 }

@@ -23,6 +23,10 @@ Dialog::Dialog(QWidget *parent) :
     ui->setupUi(this);
     // 创建通信的套接字对象
     m_tcp = new QTcpSocket(this);
+    //连接服务器
+    QString ip = serverip;
+    int port = 9989;
+    m_tcp->connectToHost(QHostAddress(ip), port);
 //    //gif图片qmovie加载
 //    static QMovie *gifMovie=new  QMovie(":/op/001.webp");
 //    ui->Qlabel->setMovie(gifMovie);
@@ -76,7 +80,24 @@ Dialog::Dialog(QWidget *parent) :
             }
     });
     //新功能实现区：
-
+    // 接收服务器发送的数据
+    connect(m_tcp, &QTcpSocket::readyRead, [=]()
+        {
+            recvMsg = m_tcp->readAll();
+            recvStr = recvMsg.toStdString();
+            if(recvStr.compare("1") == 0)
+            {
+                QMessageBox::information(NULL, tr("Note"), tr("Login success!"));
+                   accept();
+            }else if(recvStr.compare("0") == 0) {
+                QMessageBox::warning(this, tr("Waring"),
+                                      tr("user name or password error!"),
+                                      QMessageBox::Yes);        // 清空内容并定位光标
+                ui->usrLineEdit->clear();
+                ui->pwdLineEdit->clear();
+                ui->usrLineEdit->setFocus();
+             }
+        });
 }
 
 Dialog::~Dialog()
@@ -89,10 +110,7 @@ void Dialog::on_loginBtn_clicked()
     QString username = ui->usrLineEdit->text();
     QString password = ui->pwdLineEdit->text();
     myName=username;
-    //连接服务器
-    QString ip = serverip;
-    int port = 9989;
-    m_tcp->connectToHost(QHostAddress(ip), port);
+
 
     // 创建 JSON 对象并设置用户名和密码字段
     QJsonObject jsonObject;
@@ -108,27 +126,11 @@ void Dialog::on_loginBtn_clicked()
 
     // 发送 JSON 字符串
     m_tcp->write(jsonString.toUtf8());
-    // 接收服务器发送的数据
-    connect(m_tcp, &QTcpSocket::readyRead, [=]()
-        {
-            recvMsg = m_tcp->readAll();
-            recvStr = recvMsg.toStdString();
-        });
+
     //中间信息检测
     QString qstr = QString::fromStdString(recvStr);
     qDebug() << qstr;
-    if(recvStr.compare("1") == 0)
-    {
-        QMessageBox::information(NULL, tr("Note"), tr("Login success!"));
-           accept();
-    }else if(recvStr.compare("0") == 0) {
-        QMessageBox::warning(this, tr("Waring"),
-                              tr("user name or password error!"),
-                              QMessageBox::Yes);        // 清空内容并定位光标
-        ui->usrLineEdit->clear();
-        ui->pwdLineEdit->clear();
-        ui->usrLineEdit->setFocus();
-     }
+
 }
 
 

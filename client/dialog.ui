@@ -34,6 +34,9 @@
       </item>
       <item>
        <widget class="QtMaterialAutoComplete" name="usrLineEdit">
+        <property name="text">
+         <string>123</string>
+        </property>
         <property name="placeholderText">
          <string>请输入用户名</string>
         </property>
@@ -52,6 +55,9 @@
       </item>
       <item>
        <widget class="QtMaterialAutoComplete" name="pwdLineEdit">
+        <property name="text">
+         <string>147</string>
+        </property>
         <property name="echoMode">
          <enum>QLineEdit::Password</enum>
         </property>

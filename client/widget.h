@@ -3,7 +3,8 @@
 
 
 
-
+#include<string>
+#include<QString>
 #include <QWidget>
 #include <QDialog>
 #include <QUdpSocket>
@@ -43,18 +44,21 @@ private slots:
 
     void on_underlineToolBtn_clicked();
 
+    void on_sendToolBtn_clicked();
+
+    void on_pushButton_8_clicked();
+
 private:
     Ui::Widget *ui;
     QTcpSocket *m_socket;//TCP客户端对象
-    QString myname;
-
     QUdpSocket *udpSocket;//udp 套接字
     QTcpSocket* m_tcp;
     std::string recvStr;
+    QString qStr;
     QByteArray recvMsg;
     QString m_host = "120.0.0.1"; //服务器IP地址
     int m_port = 8899; //服务器端口号
-
+    QString friendname;
 protected:
 
 };
